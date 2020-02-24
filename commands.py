@@ -1,10 +1,13 @@
 import discord, random
 from discord.ext import commands
 
+
 class Commands(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        self.messages = 0
+
 
     # Commands
     # self not needed for member objects*
@@ -72,6 +75,16 @@ class Commands(commands.Cog):
         for iterations in range(amount):
             for member in members:
                 await ctx.send(f'{member.mention} {random.choice(insults)}')
+
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        self.messages += 1
+
+
+    @commands.command()
+    async def stats(self, ctx):
+        await ctx.send(f'Since Discord Bot was on, {self.messages} were sent')
 
 def setup(client):
     client.add_cog(Commands(client))
