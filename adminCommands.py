@@ -7,6 +7,7 @@ class AdminCommands(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+
     @commands.command()
     @has_permissions(administrator=True)
 
@@ -33,6 +34,46 @@ class AdminCommands(commands.Cog):
             await ctx.send(f'{member.mention} was removed of Admin.')
 
 
+
+    # Adding Roles to people(s)
+
+    @commands.command(aliases=['addRole'], description='Adds a given role, Admin Role is forbidden in this.')
+    @has_permissions(administrator=True)
+
+    async def addRoles(self, ctx, members: commands.Greedy[discord.Member], roles : commands.Greedy[discord.Role]):
+        ADMIN = discord.utils.get(ctx.guild.roles, name = 'Admin Role')
+
+        for member in members:
+            for role in roles:
+
+                new_role = discord.utils.get(ctx.guild.roles, name = str(role)) # str(role)
+                
+                if new_role == ADMIN:
+                    await ctx.send(f'Cannot use addRoles command to give admin, please try a valid role.')
+                else:
+                    await member.add_roles(new_role)
+                    await ctx.send(f'{member.mention} was granted {new_role}.')
+
+
+
+    # Removing 'x' amount of roles
+    
+    @commands.command(aliases=['removeRole'], description='Deletes a given role, Admin Role is forbidden in this.')
+    @has_permissions(administrator=True)
+
+    async def removeRoles(self, ctx, members: commands.Greedy[discord.Member], roles : commands.Greedy[discord.Role]):
+        ADMIN = discord.utils.get(ctx.guild.roles, name = 'Admin Role')
+
+        for member in members:
+            for role in roles:
+
+                new_role = discord.utils.get(ctx.guild.roles, name = str(role)) # str(role)
+                
+                if new_role == ADMIN:
+                    await ctx.send(f'Cannot use addRoles command to remove admin, please try a valid role.')
+                else:
+                    await member.remove_roles(new_role)
+                    await ctx.send(f'{member.mention} lost {new_role}.')
 
     # Killing bot commands 
 
