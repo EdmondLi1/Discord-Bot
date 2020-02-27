@@ -7,7 +7,6 @@ class AdminCommands(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-
     @commands.command()
     @has_permissions(administrator=True)
 
@@ -97,20 +96,32 @@ class AdminCommands(commands.Cog):
 
     # Commands relating to removing someone from server
     # !kick, !ban and !unban
+
     @commands.command()
     @has_permissions(administrator=True)
-    async def kick(self, ctx, members : commands.Greedy[discord.Member]):
+    async def kick(self, ctx, members : commands.Greedy[discord.Member], *, reason : str=None):
         for member in members:
-            await member.kick(reason=None)
-            await ctx.send(f'{member.mention} has been kicked.')
-
+            if member == ctx.message.author:
+                await ctx.send(f'You cannot kick yourself {ctx.message.author.mention}.')
+            elif member.guild_permissions.administrator:
+                await ctx.send(f'Kicking {member.mention} is illegal because they are also Admin.')
+            else:
+                await member.kick(reason=reason)
+                await ctx.send(f'{member.mention} has been kicked.')
+        
 
     @commands.command()
     @has_permissions(administrator=True)
     async def ban(self, ctx, members :commands.Greedy[discord.Member]):
         for member in members:
-            await member.ban(reason= None)
-            await ctx.send(f'{member.mention} has been banned.')
+            if member == ctx.message.author:
+                await ctx.send(f'Please, you cannot ban yourself {ctx.message.author.mention}.')
+            elif member.guild_permissions.administrator:
+                await ctx.send(f'Banning {member.mention} causes an error because he has Admin.')
+            else:
+                await member.ban(reason= None)
+                await ctx.send(f'{member.mention} has been banned.')
+
 
     @commands.command()
     @has_permissions(administrator=True)
