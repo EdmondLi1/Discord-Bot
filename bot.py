@@ -1,10 +1,12 @@
-import discord, random
+import discord, random, datetime
 import os
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 
-
 client = commands.Bot(command_prefix= '!')
+
+# REMOVE HELP
+client.remove_command("help")
 
 # Define read token from token file, to keep it hidden
 
