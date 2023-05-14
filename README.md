@@ -1,2 +1,4 @@
 # Discord-Bot
-Basic code a Discord Bot I'm attempting to make
+Simple Discord Bot that supports a multitude of functionalities
+
+
